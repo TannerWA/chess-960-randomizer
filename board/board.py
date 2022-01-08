@@ -41,41 +41,35 @@ class Board:
         self.black_bishop: PhotoImage = PhotoImage(file = "pieces/black_bishop.png")
         self.black_knight: PhotoImage = PhotoImage(file = "pieces/black_knight.png")
 
-        self.first_rank: list = []
-        self.eighth_rank: list = []
+        self.first_rank: list = [self.white_rook, self.white_king, self.white_rook]
+        self.eighth_rank: list = [self.black_rook, self.black_king, self.black_rook]
 
     def generate_960(self) -> None:
         self.place_queen_and_knights()
         self.place_bishops()
         self.print_order()
-        self.order_images()
 
     def place_queen_and_knights(self):
+        white_list = [self.white_queen, self.white_knight, self.white_knight]
+        black_list = [self.black_queen, self.black_knight, self.black_knight]
+        i: int = 0
         for piece in ["Q", "N", "N"]:
+            position = choice(range(len(self.piece_order) + 1))
             self.piece_order.insert(choice(range(len(self.piece_order) + 1)), piece)
+            self.first_rank.insert(position, white_list[i])
+            self.eighth_rank.insert(position, black_list[i])
+            i += 1
 
     def place_bishops(self):
         bishop_position = choice(range(len(self.piece_order) + 1))
         self.piece_order.insert(bishop_position, "B")
-        self.piece_order.insert(choice(range(bishop_position + 1, len(self.piece_order) + 1, 2)), "B")
+        self.first_rank.insert(bishop_position, self.white_bishop)
+        self.eighth_rank.insert(bishop_position, self.black_bishop)
+
+        bishop_position = choice(range(bishop_position + 1, len(self.piece_order) + 1, 2))
+        self.piece_order.insert(bishop_position, "B")
+        self.first_rank.insert(bishop_position, self.white_bishop)
+        self.eighth_rank.insert(bishop_position, self.black_bishop)
 
     def print_order(self) -> None:
         print(self.piece_order)
-
-    def order_images(self) -> None:
-        for piece in self.piece_order:
-            if(piece == "K"):
-                self.first_rank.append(self.white_king)
-                self.eighth_rank.append(self.black_king)
-            elif(piece == "Q"):
-                self.first_rank.append(self.white_queen)
-                self.eighth_rank.append(self.black_queen)
-            elif(piece == "R"):
-                self.first_rank.append(self.white_rook)
-                self.eighth_rank.append(self.black_rook)
-            elif(piece == "B"):
-                self.first_rank.append(self.white_bishop)
-                self.eighth_rank.append(self.black_bishop)
-            elif(piece == "N"):
-                self.first_rank.append(self.white_knight)
-                self.eighth_rank.append(self.black_knight)
